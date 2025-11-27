@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Centres de don - BloodLink</title>
+    <link rel="stylesheet" href="style_centre.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <header>
+        <div class="header-content">
+            <a href="index.html" class="logo">
+                <div class="logo-icon">🩸</div>
+                BloodLink
+            </a>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Accueil</a></li>
+                    <li><a href="centres.html" class="active-link">Centres de Don</a></li>
+                    <li><a href="temoignages.html">Témoignages</a></li>
+                    <li><a href="equipe.html">Notre Équipe</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero-section">
+        <div class="hero-grid">
+            <div class="hero-intro">
+                <div class="badge">
+                    <span aria-hidden="true">📍</span> Trouvez le centre le plus proche
+                </div>
+                <h1>Trouvez un centre de don près de chez vous</h1>
+                <p>
+                    Explorez la carte et la liste des centres de don connectés à notre plateforme.
+                    Visualisez en temps réel leurs besoins critiques et planifiez votre don en fonction.
+                </p>
+                <div class="hero-actions">
+                    <button class="btn btn-primary"
+                        onclick="document.getElementById('mapSection').scrollIntoView({ behavior: 'smooth' });">
+                        Voir la carte des besoins
+                    </button>
+                    <button id="locateMe" class="btn btn-secondary">
+                        <span aria-hidden="true">🗺️</span> Me localiser
+                    </button>
+                </div>
+            </div>
+
+            <div class="hero-panel">
+                <h3>Impact du don</h3>
+                <ul class="hero-stats">
+                    <li>
+                        <span>Centres actifs</span>
+                        <strong>120+</strong>
+                    </li>
+                    <li>
+                        <span>Dons facilités</span>
+                        <strong>25k+</strong>
+                    </li>
+                    <li>
+                        <span>Satisfaction</span>
+                        <strong>4.9/5</strong>
+                    </li>
+                </ul>
+                <div class="hero-steps">
+                    <div class="hero-step">
+                        <div class="hero-step-index">1</div>
+                        <div>
+                            <strong>Localisez</strong>
+                            <p>Trouvez un centre sur la carte ou dans la liste.</p>
+                        </div>
+                    </div>
+                    <div class="hero-step">
+                        <div class="hero-step-index">2</div>
+                        <div>
+                            <strong>Contactez</strong>
+                            <p>Vérifiez les besoins et prenez rendez-vous.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <main class="page">
+        <section id="mapSection" class="map-wrapper">
+            <div class="section-heading-simple">
+                <h2>Carte interactive des centres</h2>
+                <p>Sélectionnez une région ou activez la localisation pour voir les besoins prioritaires.</p>
+            </div>
+            <div class="map-controls">
+                <select id="regionFilter" aria-label="Filtrer par région">
+                    <option value="all">Toutes les régions</option>
+                </select>
+            </div>
+            <div id="map" role="region" aria-label="Carte des centres de don"></div>
+            <p class="last-update">Les besoins sont mis à jour en temps réel par les coordinateurs médicaux.</p>
+        </section>
+
+        <section id="urgentSection" class="section-card">
+            <div class="section-heading">
+                <div>
+                    <h2>Besoin urgent de sang</h2>
+                    <p>Les demandes sont regroupées par groupe sanguin pour répondre aux urgences prioritaires.</p>
+                </div>
+                <div class="pill tips-pill">Mises à jour en direct</div>
+            </div>
+
+            <div id="urgentList" class="cards-grid">
+            </div>
+
+            <div id="closestBlock" class="closest-block hidden">
+                <h3>Centres proches de vous</h3>
+                <p>Après activation de la géolocalisation, nous mettons en avant les centres les plus proches.</p>
+                <div id="closestList" class="cards-grid">
+                </div>
+            </div>
+        </section>
+
+        <section id="centersSection" class="section-card centers-section">
+            <div class="section-heading">
+                <div>
+                    <h2>Tous les centres de don</h2>
+                    <p>Consultez les hôpitaux connectés à la plateforme.</p>
+                </div>
+                <div class="pill tips-pill">Mises à jour toutes les heures</div>
+            </div>
+            <div id="centersList" class="cards-grid centers-grid">
+            </div>
+        </section>
+    </main>
+
+    <section id="donationModal" class="donation-modal" aria-hidden="true">
+        <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="donationModalTitle">
+            <button class="modal-close" data-close-modal aria-label="Fermer">&times;</button>
+            <div class="modal-header">
+                <div class="pill accent-pill">Proposer un don</div>
+                <h3 id="donationModalTitle">Faire un don</h3>
+                <p id="donationModalSubtitle">Merci de votre engagement.</p>
+            </div>
+            <form id="donationForm" class="modal-body">
+                <div class="field-group">
+                    <label>Type de don</label>
+                    <div id="donationTypes" class="donation-types">
+                    </div>
+                </div>
+                <div class="field-row">
+                    <label for="donorName">Nom complet</label>
+                    <input id="donorName" type="text" placeholder="Entrez votre nom" required>
+                </div>
+                <div class="field-row">
+                    <label for="donorContact">Téléphone / Email</label>
+                    <input id="donorContact" type="text" placeholder="Comment vous contacter ?" required>
+                </div>
+                <div class="field-row">
+                    <label for="donorNote">Message (optionnel)</label>
+                    <textarea id="donorNote" rows="3" placeholder="Disponibilités, remarques..."></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary submit-btn">Envoyer la proposition</button>
+            </form>
+        </div>
+    </section>
+
+    <script type="module" src="js_centres.js"></script>
+</body>
+
+</html>

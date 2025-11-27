@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BloodLink - Témoignages</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="temoignages.css">
+</head>
+
+<body>
+    <nav>
+        <div class="container">
+            <a href="index.html" class="logo">
+                <div class="logo-icon">
+                    <div class="blood-drop"></div>
+                </div>
+                BloodLink
+            </a>
+            <ul class="nav-links">
+                <li><a href="temoignages.html">Témoignages</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="page-header">
+        <div class="container">
+            <h1>Témoignages</h1>
+            <p>"Un clic, une vie sauvée"</p>
+        </div>
+    </div>
+
+    <div class="testimonials-section">
+        <div class="container">
+            <div class="section-intro">
+                <h2>Ils ont donné, ils témoignent</h2>
+                <p>Découvrez les histoires inspirantes de nos donneurs qui font la différence chaque jour.</p>
+            </div>
+
+            <div class="testimonials-grid" id="testimonialsGrid">
+
+            </div>
+        </div>
+    </div>
+
+
+    <button class="add-testimonial-btn" onclick="openModal()">+</button>
+    <div id="testimonialModal" class="modal">
+        <div class="modal-content">
+            <h2>Partagez votre expérience</h2>
+            <form id="testimonialForm">
+                <div class="form-group">
+                    <label>Votre nom</label>
+                    <input type="text" id="nameInput" required placeholder="Ex: Sarah Martinez">
+                </div>
+                <div class="form-group">
+                    <label>Nombre de dons effectués</label>
+                    <input type="number" id="donationsInput" min="1" required placeholder="Ex: 5">
+                </div>
+                <div class="form-group">
+                    <label>Votre témoignage</label>
+                    <textarea id="messageInput" required
+                        placeholder="Partagez votre expérience avec le don du sang..."></textarea>
+                </div>
+                <div class="modal-buttons">
+                    <button type="submit" class="submit-btn">Publier</button>
+                    <button type="button" class="cancel-btn" onclick="closeModal()">Annuler</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 BloodLink. Tous droits réservés.</p>
+            <p class="slogan">"Un clic, une vie sauvée"</p>
+        </div>
+    </footer>
+
+    <script src="temoignages.js"></script>
+</body>
+
+</html>
