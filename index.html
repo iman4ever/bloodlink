@@ -1445,7 +1445,13 @@
                 // basic validation for number fields
                 const current = document.querySelector('.question[data-step="' + step + '"]');
                 const input = current ? current.querySelector('input') : null;
-                if (input && input.required) { if (!input.value) { input.focus(); return; } }
+                if (input && input.required) {
+                    if (!input.value) {
+                        alert('Veuillez remplir ce champ');
+                        input.focus();
+                        return;
+                    }
+                }
                 if (step < maxStep) step++; showStep(step);
             });
 
@@ -1541,13 +1547,24 @@
 
             loginForm && loginForm.addEventListener('submit', function (e) {
                 e.preventDefault();
-                const username = document.getElementById('user').value;
-                const password = document.getElementById('pass').value;
-                const rememberMe = document.getElementById('remember').checked;
+                const username = document.getElementById('user').value.trim();
+                const password = document.getElementById('pass').value.trim();
 
-                // You can add actual login logic here
+                // Validation
+                if (!username) {
+                    alert('Veuillez entrer votre nom d\'utilisateur');
+                    document.getElementById('user').focus();
+                    return;
+                }
+                if (!password) {
+                    alert('Veuillez entrer votre mot de passe');
+                    document.getElementById('pass').focus();
+                    return;
+                }
+
+                const rememberMe = document.getElementById('remember').checked;
                 console.log('Login attempt:', { username, rememberMe });
-                alert('Login form submitted! (This is a demo)');
+                alert('Connexion réussie! (Démo)');
                 loginForm.reset();
                 closeLoginModal();
             });
