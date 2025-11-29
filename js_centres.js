@@ -676,6 +676,7 @@ function openDonationModal(centerName) {
 
 // Démarrage de l'application
 document.addEventListener('DOMContentLoaded', initMap);
+<<<<<<< HEAD
 // Newsletter subscribe handler (footer)
 (function () {
     const subscribeBtn = document.getElementById('subscribeBtn');
@@ -694,6 +695,9 @@ document.addEventListener('DOMContentLoaded', initMap);
         setTimeout(function () { msg.textContent = ''; }, 5000);
     });
 })();
+=======
+
+>>>>>>> 388251b188a720c8e577225661a70fbdbd591913
 // Login modal handler
 (function () {
     const loginBtn = document.getElementById('loginBtn');
@@ -720,6 +724,10 @@ document.addEventListener('DOMContentLoaded', initMap);
         const username = document.getElementById('user').value.trim();
         const password = document.getElementById('pass').value.trim();
 
+<<<<<<< HEAD
+=======
+        // Validation
+>>>>>>> 388251b188a720c8e577225661a70fbdbd591913
         if (!username) {
             alert('Veuillez entrer votre nom d\'utilisateur');
             document.getElementById('user').focus();
@@ -738,6 +746,15 @@ document.addEventListener('DOMContentLoaded', initMap);
         closeLoginModal();
     });
 
+<<<<<<< HEAD
+=======
+    // close modal on outside click
+    loginModal && loginModal.addEventListener('click', function (e) {
+        if (e.target === loginModal) closeLoginModal();
+    });
+
+    // keyboard accessibility - Escape to close
+>>>>>>> 388251b188a720c8e577225661a70fbdbd591913
     document.addEventListener('keydown', function (e) {
         if (e.key === 'Escape' && loginModal.getAttribute('aria-hidden') === 'false') {
             closeLoginModal();
