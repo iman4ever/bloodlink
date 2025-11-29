@@ -424,7 +424,7 @@ nav a:hover {
 
 /* Page Hero for Témoignages */
 .page-hero {
-    background: linear-gradient(135deg, #fff8f5 0%, #ffffff 50%, #f8f9fa 100%);
+    background: linear-gradient(135deg, #d32f2f 0%, #fde8e8 50%, #f8f9fa 100%);
     color: #2c3e50;
     padding: 8rem 2rem;
     text-align: center;

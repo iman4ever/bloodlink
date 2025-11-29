@@ -741,24 +741,39 @@ nav a:hover {
 
 /* Page Hero for Témoignages */
 .page-hero {
-    background: linear-gradient(135deg, #d32f2f 0%, #b71c1c 100%);
-    color: white;
-    padding: 4rem 2rem;
+    background: linear-gradient(135deg, #d32f2f 0%, #fbf1f1 50%, #f8f9fa 100%);
+    color: #2c3e50;
+    padding: 8rem 2rem;
     text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-content {
+    max-width: 900px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
 }
 
 .page-hero h1 {
     font-size: 3.5rem;
     font-weight: 800;
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
+    letter-spacing: -2px;
+    color: #1a1a1a;
+    line-height: 1.2;
 }
 
 .page-hero p {
-    font-size: 1.3rem;
-    max-width: 800px;
+    font-size: 1.2rem;
+    max-width: 750px;
     margin: 0 auto;
-    opacity: 0.95;
+    line-height: 1.7;
+    font-weight: 400;
+    color: #4a4a4a;
 }
+
 
 /* Testimonials Section */
 .testimonials-section {

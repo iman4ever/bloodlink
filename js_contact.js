@@ -633,3 +633,37 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 });
+function setCookie(name, value, days = 365) {
+    const expires = new Date();
+    expires.setTime(expires.getTime() + (days * 24 * 60 * 60 * 1000));
+    document.cookie = `${name}=${encodeURIComponent(value)};expires=${expires.toUTCString()};path=/`;
+}
+
+function getCookie(name) {
+    const nameEQ = name + "=";
+    const ca = document.cookie.split(';');
+    for (let i = 0; i < ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+        if (c.indexOf(nameEQ) === 0) return decodeURIComponent(c.substring(nameEQ.length, c.length));
+    }
+    return null;
+}
+
+// Charger les valeurs depuis les cookies au chargement de la page
+document.addEventListener('DOMContentLoaded', function () {
+    const savedName = getCookie('userName');
+    const savedEmail = getCookie('userEmail');
+
+    if (savedName) {
+        const nameParts = savedName.split(' ');
+        if (nameParts.length >= 2) {
+            document.getElementById('prenom').value = nameParts[0] || '';
+            document.getElementById('nom').value = nameParts.slice(1).join(' ') || '';
+        }
+    }
+
+    if (savedEmail) {
+        document.getElementById('email').value = savedEmail;
+    }
+});
