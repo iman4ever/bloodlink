@@ -20,40 +20,86 @@ body {
 }
 
 .team {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 30px;
-    padding: 50px 20px;
+    padding: 5rem 2rem;
+    background: #f8f9fa;
+}
+
+.team-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2.5rem;
 }
 
 .card {
-    width: 280px;
     background: white;
-    padding: 20px;
-    border-radius: 15px;
-    box-shadow: 0 8px 20px rgba(214, 0, 0, 0.25);
-    text-align: center;
-    border-top: 5px solid #e60000;
-    transition: 0.3s;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border-top: 4px solid #d32f2f;
+    display: flex;
+    flex-direction: column;
 }
 
 .card:hover {
-    transform: translateY(-8px);
+    transform: translateY(-10px);
+    box-shadow: 0 20px 60px rgba(211, 47, 47, 0.2);
 }
 
-.card img {
-    width: 130px;
-    height: 130px;
+.card-image-wrapper {
+    padding: 2rem 2rem 1rem;
+    display: flex;
+    justify-content: center;
+    background: linear-gradient(135deg, #fff5f5 0%, #ffffff 100%);
+}
+
+.card-image-wrapper img {
+    width: 160px;
+    height: 160px;
     border-radius: 50%;
-    margin-bottom: 15px;
-    border: 4px solid #e60000;
+    object-fit: cover;
+    border: 4px solid #d32f2f;
+    box-shadow: 0 8px 25px rgba(211, 47, 47, 0.2);
+    transition: all 0.4s ease;
+}
+
+.card:hover .card-image-wrapper img {
+    transform: scale(1.05);
+    box-shadow: 0 12px 35px rgba(211, 47, 47, 0.3);
+}
+
+.card-content {
+    padding: 1.5rem 2rem 2.5rem;
+    text-align: center;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
 }
 
 .card h3 {
-    font-size: 1.4rem;
-    margin-bottom: 5px;
-    color: #b00000;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: #2c3e50;
+}
+
+.card-role {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #d32f2f;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-size: 0.9rem;
+}
+
+.card-description {
+    font-size: 1rem;
+    line-height: 1.7;
+    color: #666;
+    margin-top: auto;
 }
 
 .role {
@@ -378,23 +424,37 @@ nav a:hover {
 
 /* Page Hero for Témoignages */
 .page-hero {
-    background: linear-gradient(135deg, #d32f2f 0%, #b71c1c 100%);
-    color: white;
-    padding: 4rem 2rem;
+    background: linear-gradient(135deg, #fff8f5 0%, #ffffff 50%, #f8f9fa 100%);
+    color: #2c3e50;
+    padding: 8rem 2rem;
     text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-content {
+    max-width: 900px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
 }
 
 .page-hero h1 {
     font-size: 3.5rem;
     font-weight: 800;
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
+    letter-spacing: -2px;
+    color: #1a1a1a;
+    line-height: 1.2;
 }
 
 .page-hero p {
-    font-size: 1.3rem;
-    max-width: 800px;
+    font-size: 1.2rem;
+    max-width: 750px;
     margin: 0 auto;
-    opacity: 0.95;
+    line-height: 1.7;
+    font-weight: 400;
+    color: #4a4a4a;
 }
 
 /* Testimonials Section */
@@ -609,6 +669,21 @@ footer {
 }
 
 /* Responsive */
+@media (max-width: 968px) {
+    .team-container {
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 2rem;
+    }
+
+    .page-hero h1 {
+        font-size: 2.5rem;
+    }
+
+    .page-hero p {
+        font-size: 1.1rem;
+    }
+}
+
 @media (max-width: 564px) {
     .login-modal-content {
         width: 90%;
@@ -631,6 +706,32 @@ footer {
     nav a {
         padding: 0.5rem 0.5rem;
         font-size: 0.9rem;
+    }
+
+    .team {
+        padding: 3rem 1.5rem;
+    }
+
+    .team-container {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .page-hero {
+        padding: 3rem 1.5rem;
+    }
+
+    .page-hero h1 {
+        font-size: 2rem;
+    }
+
+    .page-hero p {
+        font-size: 1rem;
+    }
+
+    .card-image-wrapper img {
+        width: 140px;
+        height: 140px;
     }
 }
 

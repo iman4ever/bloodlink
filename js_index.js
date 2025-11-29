@@ -38,23 +38,83 @@
     closeBtn && closeBtn.addEventListener('click', closeModal);
 
     nextBtn && nextBtn.addEventListener('click', function () {
-        // basic validation for number fields
+        // Hide previous error messages
+        document.querySelectorAll('.error-message').forEach(el => {
+            el.style.display = 'none';
+            el.textContent = '';
+        });
+
         const current = document.querySelector('.question[data-step="' + step + '"]');
         const input = current ? current.querySelector('input') : null;
+        let isValid = true;
+        let errorMsg = '';
+
         if (input && input.required) {
-            if (!input.value) {
-                alert('Veuillez remplir ce champ');
+            const value = input.value.trim();
+            if (!value) {
+                isValid = false;
+                errorMsg = 'Ce champ est obligatoire.';
+            } else {
+                // Validate age
+                if (input.id === 'age') {
+                    const age = Number(value);
+                    if (isNaN(age) || age < 0) {
+                        isValid = false;
+                        errorMsg = 'Veuillez entrer un âge valide.';
+                    } else if (age < 18) {
+                        isValid = false;
+                        errorMsg = 'L\'âge minimum requis est de 18 ans.';
+                    } else if (age > 120) {
+                        isValid = false;
+                        errorMsg = 'Veuillez entrer un âge valide.';
+                    }
+                }
+                // Validate weight
+                if (input.id === 'weight') {
+                    const weight = Number(value);
+                    if (isNaN(weight) || weight < 0) {
+                        isValid = false;
+                        errorMsg = 'Veuillez entrer un poids valide.';
+                    } else if (weight < 50) {
+                        isValid = false;
+                        errorMsg = 'Le poids minimum requis est de 50 kg.';
+                    } else if (weight > 300) {
+                        isValid = false;
+                        errorMsg = 'Veuillez entrer un poids valide.';
+                    }
+                }
+            }
+
+            if (!isValid) {
+                const errorEl = current.querySelector('.error-message');
+                if (errorEl) {
+                    errorEl.textContent = errorMsg;
+                    errorEl.style.display = 'block';
+                }
                 input.focus();
+                // Scroll to top of question to show error
+                current.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 return;
             }
         }
-        if (step < maxStep) step++; showStep(step);
+        
+        if (step < maxStep) {
+            step++;
+            showStep(step);
+        }
     });
 
     prevBtn && prevBtn.addEventListener('click', function () { if (step > 1) step--; showStep(step); });
 
     form && form.addEventListener('submit', function (e) {
         e.preventDefault();
+        
+        // Hide previous error messages
+        document.querySelectorAll('.error-message').forEach(el => {
+            el.style.display = 'none';
+            el.textContent = '';
+        });
+
         // collect answers
         const age = Number(document.getElementById('age').value || 0);
         const weight = Number(document.getElementById('weight').value || 0);
@@ -62,35 +122,142 @@
         const pregnancy = form.elements['pregnancy'].value;
         const recentDonation = form.elements['recentDonation'].value;
 
+        // Validate all fields before showing result
+        let hasErrors = false;
+        if (!age || age < 18 || age > 120) {
+            const ageError = document.getElementById('ageError');
+            if (ageError) {
+                ageError.textContent = age < 18 ? 'L\'âge minimum requis est de 18 ans.' : 'Veuillez entrer un âge valide.';
+                ageError.style.display = 'block';
+            }
+            hasErrors = true;
+        }
+        if (!weight || weight < 50 || weight > 300) {
+            const weightError = document.getElementById('weightError');
+            if (weightError) {
+                weightError.textContent = weight < 50 ? 'Le poids minimum requis est de 50 kg.' : 'Veuillez entrer un poids valide.';
+                weightError.style.display = 'block';
+            }
+            hasErrors = true;
+        }
+
+        if (hasErrors) {
+            // Go back to first question with error
+            if (!age || age < 18 || age > 120) {
+                step = 1;
+            } else if (!weight || weight < 50 || weight > 300) {
+                step = 2;
+            }
+            showStep(step);
+            document.querySelector('.question[data-step="' + step + '"]').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            return;
+        }
+
         // simple preliminary rules (indicative only)
         let eligible = true;
         const reasons = [];
 
-        if (age < 18) { eligible = false; reasons.push('Vous devez avoir au moins 18 ans.'); }
-        if (weight < 50) { eligible = false; reasons.push('Le poids minimum requis est généralement 50 kg.'); }
-        if (recentIssue === 'yes') { eligible = false; reasons.push('Vous avez eu récemment un problème de santé.'); }
-        if (pregnancy === 'yes') { eligible = false; reasons.push("La grossesse/l'allaitement nécessite un avis médical."); }
-        if (recentDonation === 'yes') { eligible = false; reasons.push('Vous avez donné récemment; respectez l\'intervalle recommandé.'); }
+        if (age < 18) { 
+            eligible = false; 
+            reasons.push('Vous devez avoir au moins 18 ans pour donner votre sang.'); 
+        }
+        if (weight < 50) { 
+            eligible = false; 
+            reasons.push('Le poids minimum requis est de 50 kg pour votre sécurité.'); 
+        }
+        if (recentIssue === 'yes') { 
+            eligible = false; 
+            reasons.push('Un délai est nécessaire après une fièvre, infection ou chirurgie majeure récente.'); 
+        }
+        if (pregnancy === 'yes') { 
+            eligible = false; 
+            reasons.push('La grossesse et l\'allaitement nécessitent un avis médical spécifique avant tout don.'); 
+        }
+        if (recentDonation === 'yes') { 
+            eligible = false; 
+            reasons.push('Un délai minimum de 3 mois est requis entre deux dons pour votre santé.'); 
+        }
 
         // show result
         form.style.display = 'none';
         resultBox.style.display = '';
         resultBox.innerHTML = '';
+        resultBox.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        
         const title = document.createElement('h3');
+        title.style.marginBottom = '1rem';
+        
         if (eligible) {
-            title.textContent = 'Résultat indicatif : Vous pourriez être éligible';
-            const p = document.createElement('p'); p.textContent = 'Ce résultat est indicatif. Prenez rendez-vous dans un centre pour un contrôle médical précis.';
-            const btn = document.createElement('a'); btn.className = 'btn-primary'; btn.href = 'centres.html'; btn.textContent = 'Trouver un centre de don';
-            resultBox.appendChild(title); resultBox.appendChild(p); resultBox.appendChild(btn);
+            title.textContent = 'Résultat préliminaire : Vous pourriez être éligible';
+            title.style.color = '#2e7d32';
+            
+            const p = document.createElement('p'); 
+            p.textContent = 'Selon les informations fournies, vous pourriez être éligible au don de sang. Ce résultat est indicatif et ne remplace pas l\'évaluation médicale réalisée en centre de don.';
+            p.style.marginBottom = '1rem';
+            p.style.color = '#555';
+            
+            const btn = document.createElement('a'); 
+            btn.className = 'btn-primary'; 
+            btn.href = 'centres.html'; 
+            btn.textContent = 'Trouver un centre de don';
+            btn.style.marginTop = '1rem';
+            btn.style.display = 'inline-block';
+            
+            resultBox.appendChild(title); 
+            resultBox.appendChild(p); 
+            resultBox.appendChild(btn);
         } else {
-            title.textContent = 'Résultat indicatif : Vous pourriez ne pas être éligible';
-            const ul = document.createElement('ul'); reasons.forEach(r => { const li = document.createElement('li'); li.textContent = r; ul.appendChild(li); });
-            const p2 = document.createElement('p'); p2.className = 'small'; p2.textContent = 'Ce test reste indicatif : si vous avez un doute, contactez un centre ou votre médecin.';
-            resultBox.appendChild(title); resultBox.appendChild(ul); resultBox.appendChild(p2);
+            title.textContent = 'Résultat préliminaire : Conditions non remplies';
+            title.style.color = '#d32f2f';
+            
+            const pIntro = document.createElement('p');
+            pIntro.textContent = 'Selon vos réponses, certaines conditions ne sont actuellement pas remplies pour effectuer un don de sang :';
+            pIntro.style.marginBottom = '1rem';
+            pIntro.style.color = '#555';
+            
+            const ul = document.createElement('ul'); 
+            ul.style.marginBottom = '1rem';
+            ul.style.paddingLeft = '1.5rem';
+            ul.style.color = '#555';
+            reasons.forEach(r => { 
+                const li = document.createElement('li'); 
+                li.textContent = r; 
+                li.style.marginBottom = '0.5rem';
+                ul.appendChild(li); 
+            });
+            
+            const p2 = document.createElement('p'); 
+            p2.className = 'small'; 
+            p2.textContent = 'Important : Ce test est indicatif. Si vous avez des questions ou des doutes, n\'hésitez pas à contacter un centre de don ou votre médecin pour une évaluation personnalisée.';
+            p2.style.marginTop = '1rem';
+            p2.style.color = '#666';
+            p2.style.fontStyle = 'italic';
+            
+            resultBox.appendChild(title); 
+            resultBox.appendChild(pIntro);
+            resultBox.appendChild(ul); 
+            resultBox.appendChild(p2);
         }
+        
         // show a back button to re-do
-        const redo = document.createElement('button'); redo.className = 'btn-secondary'; redo.textContent = 'Recommencer le pré-contrôle'; redo.addEventListener('click', function () { form.style.display = ''; resultBox.style.display = 'none'; form.reset(); step = 1; showStep(step); });
-        resultBox.appendChild(document.createElement('div')).style.marginTop = '1rem'; resultBox.appendChild(redo);
+        const redoDiv = document.createElement('div');
+        redoDiv.style.marginTop = '1.5rem';
+        const redo = document.createElement('button'); 
+        redo.className = 'btn-secondary'; 
+        redo.textContent = 'Recommencer le pré-contrôle'; 
+        redo.addEventListener('click', function () { 
+            form.style.display = ''; 
+            resultBox.style.display = 'none'; 
+            form.reset(); 
+            step = 1; 
+            showStep(step);
+            document.querySelectorAll('.error-message').forEach(el => {
+                el.style.display = 'none';
+                el.textContent = '';
+            });
+        });
+        redoDiv.appendChild(redo);
+        resultBox.appendChild(redoDiv);
     });
 
     // close modal on outside click
@@ -98,6 +265,61 @@
 
     // keyboard accessibility
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeModal(); });
+})();
+
+// Animated Statistics Counters
+(function () {
+    function animateCounter(element, target, duration = 2000) {
+        const start = 0;
+        const increment = target / (duration / 16);
+        let current = start;
+
+        const timer = setInterval(function () {
+            current += increment;
+            if (current >= target) {
+                element.textContent = formatNumber(target);
+                clearInterval(timer);
+            } else {
+                element.textContent = formatNumber(Math.floor(current));
+            }
+        }, 16);
+    }
+
+    function formatNumber(num) {
+        if (num >= 1000) {
+            return num.toLocaleString('fr-FR');
+        }
+        return num.toString();
+    }
+
+    function initCounters() {
+        const statNumbers = document.querySelectorAll('.stat-number');
+        const observerOptions = {
+            threshold: 0.5,
+            rootMargin: '0px'
+        };
+
+        const observer = new IntersectionObserver(function (entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting && !entry.target.classList.contains('counted')) {
+                    const target = parseInt(entry.target.getAttribute('data-target'));
+                    entry.target.classList.add('counted');
+                    animateCounter(entry.target, target);
+                }
+            });
+        }, observerOptions);
+
+        statNumbers.forEach(stat => {
+            observer.observe(stat);
+        });
+    }
+
+    // Initialize counters when DOM is ready
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initCounters);
+    } else {
+        initCounters();
+    }
 })();
 // Newsletter subscribe handler (footer)
 (function () {
