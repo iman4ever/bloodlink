@@ -10,7 +10,7 @@ window.addEventListener('load', function () {
                 loader.style.display = 'none';
             }, 500);
         }
-    }, 1000);
+    }, 400);
 });
 
 // === SÉLECTEUR PERSONNALISÉ MOTIF ===

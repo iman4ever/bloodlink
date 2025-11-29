@@ -1,7 +1,7 @@
 // ===================================
 //  SIMPLE LOADER LOGIC
 // ===================================
-window.addEventListener('load', function() {
+window.addEventListener('load', function () {
     const loader = document.getElementById('loader-overlay');
     setTimeout(() => {
         if (loader) {
@@ -10,7 +10,7 @@ window.addEventListener('load', function() {
                 loader.style.display = 'none';
             }, 500);
         }
-    }, 1000);
+    }, 400);
 });
 
 (function () {
@@ -112,7 +112,7 @@ window.addEventListener('load', function() {
                 return;
             }
         }
-        
+
         if (step < maxStep) {
             step++;
             showStep(step);
@@ -123,7 +123,7 @@ window.addEventListener('load', function() {
 
     form && form.addEventListener('submit', function (e) {
         e.preventDefault();
-        
+
         // Hide previous error messages
         document.querySelectorAll('.error-message').forEach(el => {
             el.style.display = 'none';
@@ -172,25 +172,25 @@ window.addEventListener('load', function() {
         let eligible = true;
         const reasons = [];
 
-        if (age < 18) { 
-            eligible = false; 
-            reasons.push('Vous devez avoir au moins 18 ans pour donner votre sang.'); 
+        if (age < 18) {
+            eligible = false;
+            reasons.push('Vous devez avoir au moins 18 ans pour donner votre sang.');
         }
-        if (weight < 50) { 
-            eligible = false; 
-            reasons.push('Le poids minimum requis est de 50 kg pour votre sécurité.'); 
+        if (weight < 50) {
+            eligible = false;
+            reasons.push('Le poids minimum requis est de 50 kg pour votre sécurité.');
         }
-        if (recentIssue === 'yes') { 
-            eligible = false; 
-            reasons.push('Un délai est nécessaire après une fièvre, infection ou chirurgie majeure récente.'); 
+        if (recentIssue === 'yes') {
+            eligible = false;
+            reasons.push('Un délai est nécessaire après une fièvre, infection ou chirurgie majeure récente.');
         }
-        if (pregnancy === 'yes') { 
-            eligible = false; 
-            reasons.push('La grossesse et l\'allaitement nécessitent un avis médical spécifique avant tout don.'); 
+        if (pregnancy === 'yes') {
+            eligible = false;
+            reasons.push('La grossesse et l\'allaitement nécessitent un avis médical spécifique avant tout don.');
         }
-        if (recentDonation === 'yes') { 
-            eligible = false; 
-            reasons.push('Un délai minimum de 3 mois est requis entre deux dons pour votre santé.'); 
+        if (recentDonation === 'yes') {
+            eligible = false;
+            reasons.push('Un délai minimum de 3 mois est requis entre deux dons pour votre santé.');
         }
 
         // show result
@@ -198,73 +198,73 @@ window.addEventListener('load', function() {
         resultBox.style.display = '';
         resultBox.innerHTML = '';
         resultBox.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        
+
         const title = document.createElement('h3');
         title.style.marginBottom = '1rem';
-        
+
         if (eligible) {
             title.textContent = 'Résultat préliminaire : Vous pourriez être éligible';
             title.style.color = '#2e7d32';
-            
-            const p = document.createElement('p'); 
+
+            const p = document.createElement('p');
             p.textContent = 'Selon les informations fournies, vous pourriez être éligible au don de sang. Ce résultat est indicatif et ne remplace pas l\'évaluation médicale réalisée en centre de don.';
             p.style.marginBottom = '1rem';
             p.style.color = '#555';
-            
-            const btn = document.createElement('a'); 
-            btn.className = 'btn-primary'; 
-            btn.href = 'centres.html'; 
+
+            const btn = document.createElement('a');
+            btn.className = 'btn-primary';
+            btn.href = 'centres.html';
             btn.textContent = 'Trouver un centre de don';
             btn.style.marginTop = '1rem';
             btn.style.display = 'inline-block';
-            
-            resultBox.appendChild(title); 
-            resultBox.appendChild(p); 
+
+            resultBox.appendChild(title);
+            resultBox.appendChild(p);
             resultBox.appendChild(btn);
         } else {
             title.textContent = 'Résultat préliminaire : Conditions non remplies';
             title.style.color = '#d32f2f';
-            
+
             const pIntro = document.createElement('p');
             pIntro.textContent = 'Selon vos réponses, certaines conditions ne sont actuellement pas remplies pour effectuer un don de sang :';
             pIntro.style.marginBottom = '1rem';
             pIntro.style.color = '#555';
-            
-            const ul = document.createElement('ul'); 
+
+            const ul = document.createElement('ul');
             ul.style.marginBottom = '1rem';
             ul.style.paddingLeft = '1.5rem';
             ul.style.color = '#555';
-            reasons.forEach(r => { 
-                const li = document.createElement('li'); 
-                li.textContent = r; 
+            reasons.forEach(r => {
+                const li = document.createElement('li');
+                li.textContent = r;
                 li.style.marginBottom = '0.5rem';
-                ul.appendChild(li); 
+                ul.appendChild(li);
             });
-            
-            const p2 = document.createElement('p'); 
-            p2.className = 'small'; 
+
+            const p2 = document.createElement('p');
+            p2.className = 'small';
             p2.textContent = 'Important : Ce test est indicatif. Si vous avez des questions ou des doutes, n\'hésitez pas à contacter un centre de don ou votre médecin pour une évaluation personnalisée.';
             p2.style.marginTop = '1rem';
             p2.style.color = '#666';
             p2.style.fontStyle = 'italic';
-            
-            resultBox.appendChild(title); 
+
+            resultBox.appendChild(title);
             resultBox.appendChild(pIntro);
-            resultBox.appendChild(ul); 
+            resultBox.appendChild(ul);
             resultBox.appendChild(p2);
         }
-        
+
         // show a back button to re-do
         const redoDiv = document.createElement('div');
         redoDiv.style.marginTop = '1.5rem';
-        const redo = document.createElement('button'); 
-        redo.className = 'btn-secondary'; 
-        redo.textContent = 'Recommencer le pré-contrôle'; 
-        redo.addEventListener('click', function () { 
-            form.style.display = ''; 
-            resultBox.style.display = 'none'; 
-            form.reset(); 
-            step = 1; 
+        const redo = document.createElement('button');
+        redo.className = 'btn-secondary';
+        redo.textContent = 'Recommencer le pré-contrôle';
+        redo.addEventListener('click', function () {
+            form.style.display = '';
+            resultBox.style.display = 'none';
+            form.reset();
+            step = 1;
             showStep(step);
             document.querySelectorAll('.error-message').forEach(el => {
                 el.style.display = 'none';

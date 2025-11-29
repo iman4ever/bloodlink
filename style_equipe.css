@@ -334,7 +334,7 @@ nav a:hover {
     left: -30px;
     width: 30px;
     height: 30px;
-    border: top-right-radius: 50%;
+    border: top-right-radius 50%;
     background: transparent;
     box-shadow: 15px 0 0 0 #c6c3c3;
 }
@@ -755,6 +755,7 @@ footer {
         font-size: 2rem;
     }
 }
+
 /* Notre Histoire Section */
 .story-section {
     padding: 5rem 2rem;
@@ -810,7 +811,7 @@ footer {
     background: #f8f9fa;
     padding: 3rem;
     border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
     border: 1px solid #eee;
 }
 
@@ -839,11 +840,11 @@ footer {
         padding: 2rem;
         font-size: 1rem;
     }
-    
+
     .story-section h2 {
         font-size: 2rem;
     }
-    
+
     .lead-text {
         font-size: 1.1rem;
     }

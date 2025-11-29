@@ -10,7 +10,7 @@ window.addEventListener('load', function () {
                 loader.style.display = 'none';
             }, 500);
         }
-    }, 1000);
+    }, 400);
 });
 
 const GOOGLE_MAPS_API_KEY = "AIzaSyCO_6H0D68_pw2l7Dyh6141gvCBW0dALho";
