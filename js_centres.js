@@ -61,6 +61,82 @@ const donationCenters = [
         patients: [
             { patient: "Amina R.", bloodType: "B-", unitsNeeded: 2, urgency: "medium", condition: "Drépanocytose" }
         ]
+    },
+    {
+        id: "hopital-rabat",
+        name: "CHU Ibn Sina",
+        region: "Rabat-Salé-Kénitra",
+        position: { lat: 34.0209, lng: -6.8416 },
+        contact: "+212 537 771 111",
+        address: "Rue Abou Al Alae Zahar, Rabat",
+        lastUpdate: "Mis à jour il y a 1 h",
+        patients: [
+            { patient: "Hassan T.", bloodType: "A+", unitsNeeded: 3, urgency: "high", condition: "Chirurgie cardiaque" },
+            { patient: "Fatima Z.", bloodType: "O+", unitsNeeded: 2, urgency: "medium", condition: "Accouchement d'urgence" }
+        ]
+    },
+    {
+        id: "hopital-oujda",
+        name: "CHU Mohammed VI Oujda",
+        region: "Oriental",
+        position: { lat: 34.6863, lng: -1.9175 },
+        contact: "+212 536 506 080",
+        address: "Boulevard Allal Ben Abdellah, Oujda",
+        lastUpdate: "Mis à jour il y a 3 h",
+        patients: [
+            { patient: "Said M.", bloodType: "B+", unitsNeeded: 4, urgency: "high", condition: "Polytraumatisme" },
+            { patient: "Nadia H.", bloodType: "AB+", unitsNeeded: 1, urgency: "low", condition: "Anémie chronique" }
+        ]
+    },
+    {
+        id: "hopital-meknes",
+        name: "Centre Hospitalier Moulay Ismail",
+        region: "Fès-Meknès",
+        position: { lat: 33.8942, lng: -5.5473 },
+        contact: "+212 535 520 506",
+        address: "Avenue Mohammed V, Meknès",
+        lastUpdate: "Mis à jour il y a 5 h",
+        patients: [
+            { patient: "Rachid B.", bloodType: "O-", unitsNeeded: 6, urgency: "high", condition: "Hémorragie digestive" }
+        ]
+    },
+    {
+        id: "hopital-kenitra",
+        name: "Centre Hospitalier Al Idrissi",
+        region: "Rabat-Salé-Kénitra",
+        position: { lat: 34.2610, lng: -6.5802 },
+        contact: "+212 537 371 313",
+        address: "Rue de l'Hôpital, Kénitra",
+        lastUpdate: "Mis à jour il y a 6 h",
+        patients: [
+            { patient: "Laila F.", bloodType: "A-", unitsNeeded: 2, urgency: "medium", condition: "Opération orthopédique" },
+            { patient: "Ahmed K.", bloodType: "B-", unitsNeeded: 3, urgency: "high", condition: "Traumatisme crânien" }
+        ]
+    },
+    {
+        id: "hopital-tetouan",
+        name: "Hopital Saniat Rmel",
+        region: "Tanger-Tétouan-Al Hoceïma",
+        position: { lat: 35.5711, lng: -5.3680 },
+        contact: "+212 539 971 414",
+        address: "Avenue Saniat Rmel, Tétouan",
+        lastUpdate: "Mis à jour ce matin",
+        patients: [
+            { patient: "Meriem S.", bloodType: "O+", unitsNeeded: 2, urgency: "medium", condition: "Césarienne d'urgence" }
+        ]
+    },
+    {
+        id: "hopital-beni-mellal",
+        name: "Centre Hospitalier Régional",
+        region: "Béni Mellal-Khénifra",
+        position: { lat: 32.3373, lng: -6.3498 },
+        contact: "+212 523 483 333",
+        address: "Boulevard Mohammed V, Béni Mellal",
+        lastUpdate: "Mis à jour il y a 8 h",
+        patients: [
+            { patient: "Kamal D.", bloodType: "AB-", unitsNeeded: 2, urgency: "low", condition: "Préparation chirurgicale" },
+            { patient: "Zineb A.", bloodType: "A+", unitsNeeded: 1, urgency: "low", condition: "Suivi hématologique" }
+        ]
     }
 ];
 
@@ -162,7 +238,7 @@ function getMarkerTemplate(center) {
         .join("");
 
     return `
-    <div style="min-width:260px; font-family: 'Inter', sans-serif; padding:4px;">
+    <div style="min-width:260px; font-family: 'Inter', sans-serif; padding:4px; color: #111;">
       <h3 style="margin-bottom:4px; font-size:1rem; font-weight:700; color:#1F2937;">${center.name}</h3>
       <p style="margin:0 0 12px; color:#6B7280; font-size:0.875rem;">${center.address}</p>
       <div style="margin-bottom:16px; border-top:1px solid #F3F4F6; padding-top:12px; display:flex; flex-direction:column; gap:8px;">${patients}</div>
@@ -197,95 +273,79 @@ function renderCenterCards(region = currentRegion) {
     }
 
     centers.forEach(center => {
-        // Calcul distance
-        let distanceBadge = "";
+        // Calcul distance pour le badge flottant
+        let badgeContent = center.region;
         if (userPosition) {
             const dist = measureDistance(userPosition, center.position).toFixed(1);
-            distanceBadge = `<div class="distance-chip">📍 ${dist} km</div>`;
+            badgeContent = `📍 ${dist} km`;
         }
 
-        // Création des chips de besoin
-        const needsChips = center.patients.map(p =>
-            `<span class="need-chip">${p.bloodType}</span>`
-        ).join("");
-
-        // Création de la mini liste de patients
-        const miniList = center.patients.slice(0, 2).map(p => `
-            <li class="center-mini-item">
-                <div>
-                    <strong>Groupe ${p.bloodType}</strong>
-                    <span>${p.condition}</span>
-                </div>
-        `).join("");
-
         const cardHTML = `
-            <article class="bg-white rounded-2xl border border-gray-200 shadow-sm hover:shadow-2xl hover:border-red-200 hover:-translate-y-2 transition-all duration-300 overflow-hidden flex flex-col h-full cursor-pointer">
-                <!-- Header -->
-                <div class="bg-gray-100 p-6 border-b border-gray-200">
-                    <div class="flex justify-between items-start mb-6">
-                        <div>
-                            <h3 class="text-xl font-bold text-gray-900 mb-1">${center.name}</h3>
-                            <p class="text-sm text-gray-500 font-medium">${center.region}</p>
-                        </div>
-                        ${distanceBadge}
-                    </div>
-                    
-                    <div class="flex flex-col gap-3">
-                        <div class="flex items-center gap-3 text-sm text-gray-500">
-                            <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-                            ${center.address}
-                        </div>
-                        <div class="flex items-center gap-3 text-sm text-gray-500">
-                            <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
-                            ${center.contact || 'Contact non disponible'}
-                        </div>
-                        <div class="flex items-center gap-3 text-sm text-gray-500">
-                            <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                            ${center.lastUpdate}
-                        </div>
-                    </div>
+            <article class="card-clean">
+                <!-- Card Header -->
+                <div class="card-header">
+                    <h3 class="card-header-title">${center.name}</h3>
+                    <span class="card-region">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                            <circle cx="12" cy="10" r="3"></circle>
+                        </svg>
+                        ${center.region}
+                    </span>
+                    ${userPosition ? `<div class="card-badge-floating">${badgeContent}</div>` : ''}
                 </div>
                 
-                <!-- Body -->
-                <div class="p-6 flex-grow">
-                    <h4 class="font-semibold text-gray-900 mb-6">Besoins actuels (${center.patients.length})</h4>
-                    
-                    <div class="space-y-4">
-                        ${center.patients.map(p => {
-            const urgencyColor = p.urgency === 'high' ? 'bg-red-600' : p.urgency === 'medium' ? 'bg-amber-500' : 'bg-emerald-500';
-            const urgencyBadge = p.urgency === 'high' ? 'bg-red-600 text-white' : p.urgency === 'medium' ? 'bg-amber-500 text-white' : 'bg-emerald-500 text-white';
-            const urgencyLabel = p.urgency === 'high' ? 'Urgent' : p.urgency === 'medium' ? 'Modéré' : 'Standard';
-
-            return `
-                            <div class="bg-gray-50 border border-gray-200 rounded-xl p-4 hover:bg-gray-100 transition-colors">
-                                <div class="flex justify-between items-center mb-3">
-                                    <div class="flex items-center gap-4">
-                                        <div class="w-12 h-12 ${urgencyColor} text-white rounded-full flex items-center justify-center font-bold text-sm shadow-sm shrink-0">
-                                            ${p.bloodType}
-                                        </div>
-                                        <div>
-                                            <h4 class="font-semibold text-gray-900 leading-tight">${p.patient}</h4>
-                                            <p class="text-sm text-gray-500 mt-0.5">${p.condition}</p>
-                                        </div>
-                                    </div>
-                                    <span class="px-2.5 py-1 rounded-lg text-xs font-semibold uppercase tracking-wide ${urgencyBadge}">
-                                        ${urgencyLabel}
-                                    </span>
-                                </div>
-                                <div class="flex items-center gap-2 text-sm text-gray-500">
-                                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path></svg>
-                                    ${p.unitsNeeded} ${p.unitsNeeded > 1 ? 'unités nécessaires' : 'unité nécessaire'}
-                                </div>
-                            </div>
-                            `;
-        }).join('')}
+                <!-- Card Content -->
+                <div class="card-content">
+                    <!-- Address -->
+                    <div class="card-info-row">
+                        <svg class="card-info-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                            <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                        </svg>
+                        <div class="card-info-content">
+                            <span class="card-info-label">Adresse</span>
+                            <span class="card-info-value">${center.address}</span>
+                        </div>
                     </div>
-                </div>
 
-                <!-- Footer -->
-                <div class="p-6 pt-0 mt-auto">
-                    <button class="open-modal-btn w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-4 rounded-lg shadow-sm hover:shadow-lg transition-all duration-200" data-center="${center.name}">
-                        Prendre rendez-vous
+                    <!-- Contact -->
+                    <div class="card-info-row">
+                        <svg class="card-info-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                        </svg>
+                        <div class="card-info-content">
+                            <span class="card-info-label">Téléphone</span>
+                            <span class="card-info-value">${center.contact || 'Non disponible'}</span>
+                        </div>
+                    </div>
+
+                    <!-- Patients Section -->
+                    <div class="card-patients-section">
+                        <span class="card-section-title">Besoins actuels (${center.patients.length})</span>
+                        <div class="flex flex-wrap gap-2">
+                            ${center.patients.map(p => `
+                                <span class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-bold" style="background: ${p.urgency === 'high' ? 'linear-gradient(135deg, #DC2626, #B91C1C)' : p.urgency === 'medium' ? 'linear-gradient(135deg, #D97706, #B45309)' : 'linear-gradient(135deg, #059669, #047857)'}; color: white; box-shadow: 0 2px 8px ${p.urgency === 'high' ? 'rgba(220, 38, 38, 0.3)' : p.urgency === 'medium' ? 'rgba(217, 119, 6, 0.3)' : 'rgba(5, 150, 105, 0.3)'};">
+                                    ${p.bloodType} • ${p.unitsNeeded} ${p.unitsNeeded > 1 ? 'poches' : 'poche'}
+                                </span>
+                            `).join('')}
+                        </div>
+                    </div>
+
+                    <!-- Last Update -->
+                    <div class="flex items-center justify-between text-xs text-gray-500 pt-2 border-t border-gray-200">
+                        <span class="flex items-center gap-1.5 font-semibold">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polyline points="12 6 12 12 16 14"></polyline>
+                            </svg>
+                            ${center.lastUpdate}
+                        </span>
+                    </div>
+
+                    <!-- Actions -->
+                    <button class="btn-outline open-modal-btn" data-center="${center.name}" style="margin-top: auto;">
+                        <span>Prendre rendez-vous</span>
                     </button>
                 </div>
             </article>
@@ -317,46 +377,63 @@ function renderUrgentCases() {
     allPatients.sort((a, b) => (a.urgency === 'high' ? -1 : 1));
 
     allPatients.forEach(p => {
-        const urgencyClass = p.urgency === 'high' ? 'urgency-high' : 'urgency-medium';
         const urgencyLabel = p.urgency === 'high' ? 'Critique' : 'Urgent';
 
         const cardHTML = `
-             <article class="bg-white rounded-2xl border border-gray-200 shadow-sm hover:shadow-2xl hover:border-red-200 hover:-translate-y-2 transition-all duration-300 overflow-hidden flex flex-col h-full cursor-pointer">
-                <!-- Header -->
-                <div class="bg-gray-100 p-6 border-b border-gray-200">
-                    <div class="flex justify-between items-start">
-                        <div class="flex items-center gap-4">
-                            <div class="w-14 h-14 ${p.urgency === 'high' ? 'bg-red-600' : 'bg-amber-500'} text-white rounded-full flex items-center justify-center font-bold text-xl shadow-sm">
-                                ${p.bloodType}
-                            </div>
-                            <div>
-                                <h3 class="font-bold text-gray-900 text-lg">${p.unitsNeeded} poches nécessaires</h3>
-                                <span class="inline-block px-2.5 py-0.5 text-xs font-semibold rounded-lg ${p.urgency === 'high' ? 'bg-red-100 text-red-700' : 'bg-amber-100 text-amber-700'} mt-1">
-                                    ${urgencyLabel}
-                                </span>
-                            </div>
+             <article class="card-clean">
+                <!-- Card Header -->
+                <div class="card-header" style="background: linear-gradient(135deg, ${p.urgency === 'high' ? '#FEF2F2' : '#FFFBEB'} 0%, ${p.urgency === 'high' ? '#FEE2E2' : '#FEF3C7'} 100%);">
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="text-5xl font-black ${p.urgency === 'high' ? 'text-red-600' : 'text-amber-600'}" style="text-shadow: 0 2px 10px ${p.urgency === 'high' ? 'rgba(220, 38, 38, 0.2)' : 'rgba(217, 119, 6, 0.2)'}">
+                            ${p.bloodType}
+                        </div>
+                        <div class="card-badge-floating" style="position: relative; top: 0; right: 0; background: ${p.urgency === 'high' ? 'linear-gradient(135deg, #DC2626, #B91C1C)' : 'linear-gradient(135deg, #D97706, #B45309)'}; box-shadow: 0 4px 12px ${p.urgency === 'high' ? 'rgba(220, 38, 38, 0.4)' : 'rgba(217, 119, 6, 0.4)'}">
+                            ${urgencyLabel}
                         </div>
                     </div>
+                    <h3 class="card-header-title" style="font-size: 1.25rem;">${p.unitsNeeded} ${p.unitsNeeded > 1 ? 'poches nécessaires' : 'poche nécessaire'}</h3>
                 </div>
                 
-                <!-- Body -->
-                <div class="p-6 flex-grow">
-                    <div class="bg-gray-50 rounded-xl p-4 border border-gray-200">
-                        <div class="flex justify-between items-center mb-2">
-                            <strong class="text-gray-900 font-semibold">Pour : ${p.patient}</strong>
-                        </div>
-                        <span class="text-sm text-gray-500 block mb-3">${p.condition}</span>
-                        <div class="flex items-center gap-2 text-sm text-gray-500 border-t border-gray-200 pt-3">
-                            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-                            ${p.centerName}
+                <!-- Card Content -->
+                <div class="card-content">
+                    <!-- Patient Info -->
+                    <div class="card-info-row">
+                        <svg class="card-info-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                        <div class="card-info-content">
+                            <span class="card-info-label">Patient</span>
+                            <span class="card-info-value">${p.patient}</span>
                         </div>
                     </div>
-                </div>
-                
-                <!-- Footer -->
-                <div class="p-6 pt-0 mt-auto">
-                    <button class="open-modal-btn w-full bg-white border-2 border-gray-200 text-gray-700 hover:border-red-600 hover:text-red-600 font-semibold py-3 px-4 rounded-lg transition-all duration-200" data-center="${p.centerName}">
-                        Je donne pour ${p.patient.split(' ')[0]}
+
+                    <!-- Condition -->
+                    <div class="card-info-row">
+                        <svg class="card-info-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+                        </svg>
+                        <div class="card-info-content">
+                            <span class="card-info-label">Condition</span>
+                            <span class="card-info-value">${p.condition}</span>
+                        </div>
+                    </div>
+
+                    <!-- Hospital -->
+                    <div class="card-info-row">
+                        <svg class="card-info-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                            <circle cx="12" cy="10" r="3"></circle>
+                        </svg>
+                        <div class="card-info-content">
+                            <span class="card-info-label">Centre</span>
+                            <span class="card-info-value">${p.centerName}</span>
+                        </div>
+                    </div>
+
+                    <!-- Action Button -->
+                    <button class="btn-outline open-modal-btn" data-center="${p.centerName}" style="margin-top: auto;">
+                        <span>Je donne pour ${p.patient.split(' ')[0]}</span>
                     </button>
                 </div>
             </article>
@@ -528,32 +605,26 @@ function renderClosestCenters() {
 
     centers.forEach(center => {
         const dist = measureDistance(userPosition, center.position).toFixed(1);
-        const needsChips = center.patients.map(p =>
-            `<span class="need-chip">${p.bloodType}</span>`
-        ).join("");
 
         wrapper.innerHTML += `
-            <article class="bg-white rounded-2xl border border-gray-200 shadow-sm hover:shadow-xl hover:border-red-200 hover:-translate-y-1 transition-all duration-300 overflow-hidden flex flex-col h-full cursor-pointer">
-                <div class="bg-gray-100 p-4 border-b border-gray-200 flex justify-between items-start">
-                    <div>
-                        <h3 class="font-bold text-gray-900 text-sm mb-0.5">${center.name}</h3>
-                        <p class="text-xs text-gray-500 font-medium">${center.region}</p>
-                    </div>
-                    <div class="bg-blue-50 text-blue-600 text-xs font-bold px-2 py-1 rounded-lg flex items-center gap-1 border border-blue-100">
+            <article class="card-clean">
+                <div class="card-visual" style="height: 100px; padding: 1rem;">
+                    <div class="card-badge-floating">
                         📍 ${dist} km
                     </div>
                 </div>
                 
-                <div class="p-4 flex-grow">
-                    <div class="flex flex-wrap gap-1.5">
-                        ${needsChips}
+                <div class="card-content" style="padding: 1.5rem;">
+                    <div>
+                        <h3 class="card-title" style="font-size: 1.1rem;">${center.name}</h3>
+                        <p class="card-subtitle" style="font-size: 0.85rem;">${center.region}</p>
                     </div>
-                </div>
-                
-                <div class="p-4 pt-0 mt-auto">
-                    <button class="open-modal-btn w-full bg-gray-900 hover:bg-gray-800 text-white text-xs font-semibold py-2.5 rounded-lg transition-colors shadow-sm" data-center="${center.name}">
-                        Contacter ce centre
-                    </button>
+                    
+                    <div class="card-actions" style="margin-top: 1rem;">
+                        <button class="btn-outline open-modal-btn" data-center="${center.name}" style="width: 100%;">
+                            <span>Contacter</span>
+                        </button>
+                    </div>
                 </div>
             </article>
         `;
