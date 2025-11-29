@@ -676,3 +676,61 @@ function openDonationModal(centerName) {
 
 // Démarrage de l'application
 document.addEventListener('DOMContentLoaded', initMap);
+
+// Login modal handler
+(function () {
+    const loginBtn = document.getElementById('loginBtn');
+    const loginModal = document.getElementById('loginModal');
+    const loginModalClose = document.getElementById('loginModalClose');
+    const loginForm = document.getElementById('loginForm');
+
+    function openLoginModal() {
+        loginModal.setAttribute('aria-hidden', 'false');
+        loginModal.style.display = 'flex';
+        document.getElementById('user').focus();
+    }
+
+    function closeLoginModal() {
+        loginModal.setAttribute('aria-hidden', 'true');
+        loginModal.style.display = 'none';
+    }
+
+    loginBtn && loginBtn.addEventListener('click', openLoginModal);
+    loginModalClose && loginModalClose.addEventListener('click', closeLoginModal);
+
+    loginForm && loginForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+        const username = document.getElementById('user').value.trim();
+        const password = document.getElementById('pass').value.trim();
+
+        // Validation
+        if (!username) {
+            alert('Veuillez entrer votre nom d\'utilisateur');
+            document.getElementById('user').focus();
+            return;
+        }
+        if (!password) {
+            alert('Veuillez entrer votre mot de passe');
+            document.getElementById('pass').focus();
+            return;
+        }
+
+        const rememberMe = document.getElementById('remember').checked;
+        console.log('Login attempt:', { username, rememberMe });
+        alert('Connexion réussie! (Démo)');
+        loginForm.reset();
+        closeLoginModal();
+    });
+
+    // close modal on outside click
+    loginModal && loginModal.addEventListener('click', function (e) {
+        if (e.target === loginModal) closeLoginModal();
+    });
+
+    // keyboard accessibility - Escape to close
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && loginModal.getAttribute('aria-hidden') === 'false') {
+            closeLoginModal();
+        }
+    });
+})();
