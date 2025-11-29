@@ -126,9 +126,16 @@ textarea {
 }
 
 .error {
-    color: red;
-    font-size: 14px;
-    margin: 4px 0 0;
+    display: none;
+    color: #e74c3c;
+    font-size: 0.85em;
+    margin-top: 5px;
+    font-weight: 500;
+    min-height: 20px;
+}
+
+.error:not(:empty) {
+    display: block !important;
 }
 
 .success {
@@ -138,7 +145,7 @@ textarea {
 }
 
 .hidden {
-    display: none;
+    display: none !important;
 }
 
 .btn {

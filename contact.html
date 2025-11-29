@@ -58,7 +58,7 @@
         <div class="contact-layout">
             <div class="contact-left">
                 <p class="info-text">
-                    <span class="warning-icon">⚠️</span><br>
+                    <span class="warning-icon">⚠</span><br>
                     <strong>Avertissement important après votre don</strong><br><br>
                     Si, dans les 15 jours suivant votre venue, vous ressentez de la fièvre ou tout autre signe pouvant
                     évoquer
@@ -163,6 +163,24 @@
                             <p class="error" id="confirmPasswordError"></p>
                         </div>
                     </div>
+                    <!-- Carte Nationale -->
+                    <label style="margin-top: 20px; font-weight: 600;">Documents d'identité *</label>
+                    <p style="font-size: 0.9em; color: #666; margin-bottom: 15px;">Veuillez télécharger les deux côtés
+                        de votre carte nationale en format PDF</p>
+
+                    <div class="row">
+                        <div>
+                            <label>Carte nationale (Avant) *</label>
+                            <input type="file" id="cardFront" accept=".pdf" required>
+                            <p class="error" id="cardFrontError"></p>
+                        </div>
+                        <div>
+                            <label>Carte nationale (Arrière) *</label>
+                            <input type="file" id="cardBack" accept=".pdf" required>
+                            <p class="error" id="cardBackError"></p>
+                        </div>
+                    </div>
+
 
                     <button type="submit" class="btn">Envoyer la demande</button>
                     <p id="successMsg" class="success hidden">Votre requête a été envoyée avec succès ✔</p>
