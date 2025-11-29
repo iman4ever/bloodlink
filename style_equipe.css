@@ -424,7 +424,7 @@ nav a:hover {
 
 /* Page Hero for Témoignages */
 .page-hero {
-    background: linear-gradient(135deg, #d32f2f 0%, #fde8e8 50%, #f8f9fa 100%);
+    background: linear-gradient(135deg, #ce4343 0%, #fde8e8 50%, #f8f9fa 100%);
     color: #2c3e50;
     padding: 8rem 2rem;
     text-align: center;
@@ -797,34 +797,3 @@ footer {
         margin-top: 2rem;
     }
 }
-/* ===================================
-   SIMPLE LOADER
-   =================================== */
-#loader-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: #ffffff;
-    z-index: 9999;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transition: opacity 0.5s ease;
-}
-
-.loader-spinner {
-    width: 50px;
-    height: 50px;
-    border: 5px solid #f3f3f3;
-    border-top: 5px solid #DC2626; /* Primary Red */
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-

@@ -61,15 +61,21 @@ const testimonials = [
 
 function displayTestimonials() {
     const grid = document.getElementById('testimonialsGrid');
-    grid.innerHTML = testimonials.map(t => `
-        <div class="testimonial-card">
+    if (!grid) return;
+
+    grid.innerHTML = testimonials.map((t, index) => `
+        <div class="testimonial-card" style="animation: fadeInUp 0.5s ease forwards ${index * 0.1}s; opacity: 0; transform: translateY(20px);">
             <span class="quote-icon">"</span>
             <div class="testimonial-header">
                 <div class="testimonial-avatar">${t.initial}</div>
                 <div class="testimonial-info">
                     <h3>${t.name}</h3>
                     <div class="donations-badge">
-                        <span class="blood-icon">💉</span>
+                        <span class="blood-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
+                                <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z" />
+                            </svg>
+                        </span>
                         <span class="donations-count">${t.donations} dons</span>
                     </div>
                 </div>
@@ -78,49 +84,92 @@ function displayTestimonials() {
             <div class="testimonial-date">${t.date}</div>
         </div>
     `).join('');
+
+    // Add keyframes for animation if not present
+    if (!document.getElementById('dynamic-keyframes')) {
+        const style = document.createElement('style');
+        style.id = 'dynamic-keyframes';
+        style.innerHTML = `
+            @keyframes fadeInUp {
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    }
 }
 
 
 function openModal() {
-    document.getElementById('testimonialModal').classList.add('active');
+    const modal = document.getElementById('testimonialModal');
+    if (modal) {
+        modal.classList.add('active');
+        modal.setAttribute('aria-hidden', 'false');
+        const nameInput = document.getElementById('nameInput');
+        if (nameInput) nameInput.focus();
+    }
 }
 
 function closeModal() {
-    document.getElementById('testimonialModal').classList.remove('active');
-    document.getElementById('testimonialForm').reset();
+    const modal = document.getElementById('testimonialModal');
+    if (modal) {
+        modal.classList.remove('active');
+        modal.setAttribute('aria-hidden', 'true');
+        const form = document.getElementById('testimonialForm');
+        if (form) form.reset();
+    }
 }
 
 
-document.getElementById('testimonialForm').addEventListener('submit', function (e) {
-    e.preventDefault();
+const testimonialForm = document.getElementById('testimonialForm');
+if (testimonialForm) {
+    testimonialForm.addEventListener('submit', function (e) {
+        e.preventDefault();
 
-    const name = document.getElementById('nameInput').value;
-    const donations = document.getElementById('donationsInput').value;
-    const message = document.getElementById('messageInput').value;
+        const name = document.getElementById('nameInput').value;
+        const donations = document.getElementById('donationsInput').value;
+        const message = document.getElementById('messageInput').value;
 
-    testimonials.unshift({
-        name: name,
-        donations: parseInt(donations),
-        message: message,
-        initial: name.charAt(0).toUpperCase(),
-        date: "À l'instant"
-    });
+        testimonials.unshift({
+            name: name,
+            donations: parseInt(donations),
+            message: message,
+            initial: name.charAt(0).toUpperCase(),
+            date: "À l'instant"
+        });
 
-    displayTestimonials();
-    closeModal();
-
-    alert('Merci pour votre témoignage! Votre message a été publié avec succès. 💚');
-});
-
-
-document.getElementById('testimonialModal').addEventListener('click', function (e) {
-    if (e.target === this) {
+        displayTestimonials();
         closeModal();
+
+        alert('Merci pour votre témoignage! Votre message a été publié avec succès.');
+    });
+}
+
+
+const testimonialModal = document.getElementById('testimonialModal');
+if (testimonialModal) {
+    testimonialModal.addEventListener('click', function (e) {
+        if (e.target === this) {
+            closeModal();
+        }
+    });
+}
+
+// Close modal on Escape key
+document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') {
+        const modal = document.getElementById('testimonialModal');
+        if (modal && modal.classList.contains('active')) {
+            closeModal();
+        }
     }
 });
 
 
 displayTestimonials();
+
 // Newsletter subscribe handler (footer)
 (function () {
     const subscribeBtn = document.getElementById('subscribeBtn');
@@ -131,14 +180,29 @@ displayTestimonials();
     }
     subscribeBtn && subscribeBtn.addEventListener('click', function () {
         const value = emailInput && emailInput.value && emailInput.value.trim();
-        if (!value) { msg.textContent = 'Veuillez entrer une adresse e-mail.'; msg.classList.add('error'); return; }
-        if (!validateEmail(value)) { msg.textContent = "Adresse e-mail invalide."; msg.classList.add('error'); return; }
-        msg.classList.remove('error');
-        msg.textContent = 'Merci ! Votre adresse a bien été enregistrée.';
-        emailInput.value = '';
-        setTimeout(function () { msg.textContent = ''; }, 5000);
+        if (!value) {
+            if (msg) {
+                msg.textContent = 'Veuillez entrer une adresse e-mail.';
+                msg.classList.add('error');
+            }
+            return;
+        }
+        if (!validateEmail(value)) {
+            if (msg) {
+                msg.textContent = "Adresse e-mail invalide.";
+                msg.classList.add('error');
+            }
+            return;
+        }
+        if (msg) {
+            msg.classList.remove('error');
+            msg.textContent = 'Merci ! Votre adresse a bien été enregistrée.';
+            setTimeout(function () { msg.textContent = ''; }, 5000);
+        }
+        if (emailInput) emailInput.value = '';
     });
 })();
+
 // Login modal handler
 (function () {
     const loginBtn = document.getElementById('loginBtn');
@@ -147,14 +211,19 @@ displayTestimonials();
     const loginForm = document.getElementById('loginForm');
 
     function openLoginModal() {
-        loginModal.setAttribute('aria-hidden', 'false');
-        loginModal.style.display = 'flex';
-        document.getElementById('user').focus();
+        if (loginModal) {
+            loginModal.setAttribute('aria-hidden', 'false');
+            loginModal.style.display = 'flex';
+            const user = document.getElementById('user');
+            if (user) user.focus();
+        }
     }
 
     function closeLoginModal() {
-        loginModal.setAttribute('aria-hidden', 'true');
-        loginModal.style.display = 'none';
+        if (loginModal) {
+            loginModal.setAttribute('aria-hidden', 'true');
+            loginModal.style.display = 'none';
+        }
     }
 
     loginBtn && loginBtn.addEventListener('click', openLoginModal);
@@ -162,21 +231,24 @@ displayTestimonials();
 
     loginForm && loginForm.addEventListener('submit', function (e) {
         e.preventDefault();
-        const username = document.getElementById('user').value.trim();
-        const password = document.getElementById('pass').value.trim();
+        const user = document.getElementById('user');
+        const pass = document.getElementById('pass');
+        const username = user ? user.value.trim() : '';
+        const password = pass ? pass.value.trim() : '';
 
         if (!username) {
             alert('Veuillez entrer votre nom d\'utilisateur');
-            document.getElementById('user').focus();
+            if (user) user.focus();
             return;
         }
         if (!password) {
             alert('Veuillez entrer votre mot de passe');
-            document.getElementById('pass').focus();
+            if (pass) pass.focus();
             return;
         }
 
-        const rememberMe = document.getElementById('remember').checked;
+        const remember = document.getElementById('remember');
+        const rememberMe = remember ? remember.checked : false;
         console.log('Login attempt:', { username, rememberMe });
         alert('Connexion réussie! (Démo)');
         loginForm.reset();
@@ -184,7 +256,7 @@ displayTestimonials();
     });
 
     document.addEventListener('keydown', function (e) {
-        if (e.key === 'Escape' && loginModal.getAttribute('aria-hidden') === 'false') {
+        if (e.key === 'Escape' && loginModal && loginModal.getAttribute('aria-hidden') === 'false') {
             closeLoginModal();
         }
     });

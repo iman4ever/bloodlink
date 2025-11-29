@@ -1,7 +1,7 @@
 // ===================================
 //  SIMPLE LOADER LOGIC
 // ===================================
-window.addEventListener('load', function() {
+window.addEventListener('load', function () {
     const loader = document.getElementById('loader-overlay');
     setTimeout(() => {
         if (loader) {
