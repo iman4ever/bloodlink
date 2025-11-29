@@ -1,3 +1,18 @@
+// ===================================
+//  SIMPLE LOADER LOGIC
+// ===================================
+window.addEventListener('load', function() {
+    const loader = document.getElementById('loader-overlay');
+    setTimeout(() => {
+        if (loader) {
+            loader.style.opacity = '0';
+            setTimeout(() => {
+                loader.style.display = 'none';
+            }, 500);
+        }
+    }, 1000);
+});
+
 (function () {
     const openBtn = document.getElementById('checkEligibilityBtn');
     const modal = document.getElementById('eligibilityModal');

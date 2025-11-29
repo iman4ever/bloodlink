@@ -1,3 +1,18 @@
+// ===================================
+//  SIMPLE LOADER LOGIC
+// ===================================
+window.addEventListener('load', function() {
+    const loader = document.getElementById('loader-overlay');
+    setTimeout(() => {
+        if (loader) {
+            loader.style.opacity = '0';
+            setTimeout(() => {
+                loader.style.display = 'none';
+            }, 500);
+        }
+    }, 1000);
+});
+
 // Newsletter subscribe handler (footer)
 (function () {
     const subscribeBtn = document.getElementById('subscribeBtn');

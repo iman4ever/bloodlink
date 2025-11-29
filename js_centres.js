@@ -1,3 +1,18 @@
+// ===================================
+//  SIMPLE LOADER LOGIC
+// ===================================
+window.addEventListener('load', function () {
+    const loader = document.getElementById('loader-overlay');
+    setTimeout(() => {
+        if (loader) {
+            loader.style.opacity = '0';
+            setTimeout(() => {
+                loader.style.display = 'none';
+            }, 500);
+        }
+    }, 1000);
+});
+
 const GOOGLE_MAPS_API_KEY = "AIzaSyCO_6H0D68_pw2l7Dyh6141gvCBW0dALho";
 const donationCenters = [
     {
